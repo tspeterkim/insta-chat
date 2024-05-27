@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Facebook Login JavaScript Example</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+<script>
+
+    function statusChangeCallback(response) {  // Called with the results from FB.getLoginStatus().
+        console.log('statusChangeCallback');
+        console.log(response);                   // The current login status of the person.
+        if (response.status === 'connected') {   // Logged into your webpage and Facebook.
+            testAPI();
+        } else {                                 // Not logged into your webpage or we are unable to tell.
+            document.getElementById('status').innerHTML = 'Please log ' +
+                'into this webpage.';
+        }
+    }
+
+    function checkLoginState() {               // Called when a person is finished with the Login Button.
+        FB.getLoginStatus(function(response) {   // See the onlogin handler
+            statusChangeCallback(response);
+        });
+    }
+
+
+    window.fbAsyncInit = function() {
+
+        FB.init({
+            appId      : '400706684811642',
+            cookie     : true,                     // Enable cookies to allow the server to access the session.
+            xfbml      : true,                     // Parse social plugins on this webpage.
+            version    : 'v20.0'           // Use this Graph API version for this call.
+        });
+
+        FB.getLoginStatus(function(response) {   // Called after the JS SDK has been initialized.
+            statusChangeCallback(response);        // Returns the login status.
+        });
+    };
+
+    var page_access_token;
+    var page_id;
+    var ig_id;
+    function testAPI() {                      // Testing Graph API after login.  See statusChangeCallback() for when this call is made.
+        console.log('Welcome!  Fetching your information.... ');
+        FB.api('/me', function(response) {
+            console.log('Successful login for: ' + response.name);
+            document.getElementById('status').innerHTML =
+                'Thanks for logging in, ' + response.name + '!';
+        });
+
+        FB.api('/me/accounts?fields=instagram_business_account,access_token', function(response) {
+            ig_id = response.data[0].instagram_business_account.id;
+            page_access_token = response.data[0].access_token;
+            page_id = response.data[0].id;
+        });
+
+        FB.api('/17841466475166254/media?fields=media_url', function(response) {
+            response.data.forEach(function(item) {
+                console.log(item.media_url);
+
+                var img = document.createElement('img');
+                img.src = item.media_url;
+                img.width=200;
+                img.addEventListener('click', function() {
+                    // Run your JavaScript function here
+                    console.log('Image clicked');
+                    document.getElementById('selected').innerHTML = item.id;
+
+                });
+
+                var a = document.createElement('a');
+                a.href = '#'
+                a.appendChild(img);
+                document.getElementById('posts').appendChild(a);
+            });
+        });
+    }
+
+    function submit() {
+        var post_id = document.getElementById('selected').innerHTML;
+        var keywords = document.getElementById('keywords').value.split(",");
+        var reply = document.getElementById('reply').value;
+
+        var li = document.createElement('li');
+        var a_del = document.createElement('a');
+
+        a_del.href = '#';
+        a_del.textContent= 'Delete';
+        li.innerHTML = document.getElementById('keywords').value + reply;
+        li.appendChild(a_del);
+        document.getElementById('automations').appendChild(li);
+
+        document.getElementById('keywords').value = "";
+        document.getElementById('reply').value = "";
+        // FB.api('/'+post_id+'/comments', function(response) {
+        //     response.data.forEach(function(item) {
+        //         var comment = item.text;
+        //         var comment_id = item.id;
+        //         var keywords = document.getElementById('keywords').value.split(",");
+        //         var containsKeyword = keywords.some(function(keyword) {
+        //             return comment.includes(keyword);
+        //         });
+        //
+        //         if (!containsKeyword) {
+        //             return;
+        //         }
+        //
+        //         // send private reply
+        //         var reply = document.getElementById('reply').value;
+        //         FB.api('/'+page_id+'/messages', 'POST',
+        //             {
+        //                 recipient: { comment_id: comment_id },
+        //                 message: { text: reply },
+        //                 access_token: page_access_token
+        //             },
+        //             function(response) {
+        //                 console.log(response);
+        //             }
+        //         );
+        //
+        //     });
+        // });
+    }
+
+</script>
+
+
+<!-- The JS SDK Login Button -->
+
+<fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
+</fb:login-button>
+
+
+<div id="asd">
+    <ul id="automations"></ul>
+</div>
+<div id="status">
+</div>
+<div id="posts">
+</div>
+<div id="control">
+    <p id="selected"></p>
+    <label for="keywords">Keywords:</label>
+    <input type="text" id="keywords" name="keywords">
+    <br>
+    <label for="reply">Reply:</label>
+    <textarea id="reply" name="reply"></textarea>
+
+    <button onclick="submit()">Submit</button>
+</div>
+
+<!-- Load the JS SDK asynchronously -->
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+</body>
+</html>

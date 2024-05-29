@@ -10,7 +10,7 @@ The simplest Instagram chat automation tool made with Google Sheets, for my wife
 
 # Background
 
-My wife is a [Youtuber](https://www.youtube.com/@bambigirltv)/[Influencer](https://www.instagram.com/hi_bambigirl/?hl=en).
+My wife is a [Youtuber](https://www.youtube.com/c/bambigirltv)/[Influencer](https://www.instagram.com/hi_bambigirl/?hl=en).
 
 One day, I saw her about to subscribe to an Instagram chat automation
 tool for $15/month.

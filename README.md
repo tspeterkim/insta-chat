@@ -4,7 +4,7 @@ The simplest Instagram chat automation tool made with Google Sheets, for my wife
 
 ![screenshot](screenshot.png)
 
-+ 60 lines of Javascript (`Code.gs`, `index.html`) for the frontend
++ 60 lines of Javascript for the frontend (`Code.gs`, `index.html`)
 + 60 lines of Python for the backend (`bot.py`)
 + Made with <3
 

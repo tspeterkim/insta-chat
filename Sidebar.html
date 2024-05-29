@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <base target="_top">
+</head>
+<body>
+<script>
+    function statusChangeCallback(response) {
+        if (response.status === 'connected') {
+            init();
+        }
+    }
+
+    function checkLoginState() {
+        FB.getLoginStatus(function(response) {
+            statusChangeCallback(response);
+        });
+    }
+
+    window.fbAsyncInit = function() {
+        FB.init({
+            appId   : '400706684811642',
+            cookie  : true,
+            xfbml   : true,
+            version : 'v20.0'
+        });
+
+        FB.getLoginStatus(function(response) {
+            statusChangeCallback(response);
+        });
+    };
+
+    function init() {
+        // TODO: combine it with the next call
+        FB.api('/me', function(response) {
+            document.getElementById('status').innerHTML =
+                'Hi, ' + response.name + '';
+        });
+
+        FB.api('/me/accounts?fields=instagram_business_account,access_token', function(main_response) {
+            var ig_id = main_response.data[0].instagram_business_account.id;
+            var page_access_token = main_response.data[0].access_token;
+            var page_id = main_response.data[0].id;
+
+            if (document.getElementById('posts').innerHTML == "") {
+                FB.api('/'+ig_id+'/media?fields=media_url,thumbnail_url', function(response) {
+                    response.data.forEach(function(item) {
+                        var img = document.createElement('img');
+                        img.src = item.media_url;
+                        img.src = 'thumbnail_url' in item ? item.thumbnail_url : item.media_url;
+                        img.width = 200;
+
+                        var fig = document.createElement('figure');
+                        fig.appendChild(img);
+
+                        var figcaption = document.createElement('figcaption');
+                        figcaption.innerHTML = item.id;
+                        fig.appendChild(figcaption)
+                        document.getElementById('posts').appendChild(fig);
+                    });
+                });
+            }
+            google.script.run.storeToken(page_access_token, page_id);
+        });
+    }
+</script>
+
+<fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
+</fb:login-button>
+<div id="status"></div>
+<div id="posts"></div>
+
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+</body>
+</html>

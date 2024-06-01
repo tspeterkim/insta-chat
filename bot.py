@@ -56,5 +56,5 @@ while True:
                 # set aside comments that we don't need to reply to again (avoids rate limiting from FB)
                 if 'error' in response and response['error']['code'] == -1:
                     sent_cmt_ids.add(comment_id)
-                print(response.json()) # for sanity
+                print(response) # for sanity
     time.sleep(60) # don't need real-time replies

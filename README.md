@@ -31,8 +31,8 @@ you can build full-on websites in your Google Sheets.
 I embedded custom HTML with the FB Login JS Button. My wife uses it to log in
 and I populate the sidebar with her Instagram posts.
 
-Whatever my wife puts in for the automations, my `bot.py` script 
-running in the cloud periodically reads the Google sheets and sends
+Then, my wife creates the automations entries, and my `bot.py` script 
+(running in the cloud) periodically reads the Google Sheets and sends
 the desired message to her followers.
 
 # The Aftermath
@@ -41,5 +41,5 @@ My wife cancelled her subscription. We are now saving $15/month. She loves me mo
 
 ## I also want something like this.
 
-The backend only works with my wife's google sheet. Email me if you're interested in having something similar.
+The backend only works with my wife's Google Sheet. Email me if you're interested in having something similar.
 If there's enough interest, I will build something that everyone can use.
